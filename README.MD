@@ -15,9 +15,9 @@ git clone https://github.com/rmcgirr83/hidemyprofile.git ext/rmcgirr83/hidemypro
 ```
 
 ### 2. activate
-Go to admin panel -> tab customise -> Manage extensions -> enable Hide My Profile
-Set the permissions for the groups/users you want to be able to hide their profiles
-Once set a new entry for them to choose will display in the user control panel under Board preferences
+1. Go to admin panel -> tab customise -> Manage extensions -> enable Hide My Profile
+2. Set the permissions for the groups/users you want to be able to hide their profiles
+3. Once set a new entry for them to choose will display in the user control panel under Board preferences
 
 ## Update instructions:
 1. Go to your phpBB Board > Admin Control Panel > Customise > Manage extensions > Hide My Profile: disable
