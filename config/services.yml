@@ -1,0 +1,10 @@
+services:
+    rmcgirr83.hidemyprofile.listener:
+        class: rmcgirr83\hidemyprofile\event\listener
+        arguments:
+            - '@auth'
+            - '@request'
+            - '@template'
+            - '@user'
+        tags:
+            - { name: event.listener }
