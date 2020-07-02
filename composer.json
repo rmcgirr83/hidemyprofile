@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "This Extension will allow your members to choose to hide their profile or not.  Permission based and admins and mods always are allowed to view others profiles.",
 	"version": "1.0.0",
-	"time": "2020-06-16",
+	"time": "2020-07-02",
 	"keywords": ["phpbb", "extension", "hide my profile", "communication"],
 	"license": "GPL-2.0-only",
 	"authors": [

@@ -1,7 +1,7 @@
 <dl>
-	<dt><label>{L_HIDEMYPROFILE}{L_COLON}</label><br /><span>{L_HIDEMYPROFILE_EXPLAIN}</span></dt>
+	<dt><label>{{ lang('HIDEMYPROFILE') }}{{ lang('COLON') }}</label><br /><span>{{ lang('HIDEMYPROFILE_EXPLAIN') }}</span></dt>
 	<dd>
-		<label><input type="radio" name="hmp" value="1"<!-- IF HMP --> checked="checked"<!-- ENDIF --> /> {L_YES}</label>
-		<label><input type="radio" name="hmp" value="0"<!-- IF not HMP --> checked="checked"<!-- ENDIF --> /> {L_NO}</label>	
+		<label><input type="radio" name="hmp" value="1"{% if HMP %} checked="checked"{% endif %} /> {{ lang('YES') }}</label>
+		<label><input type="radio" name="hmp" value="0"{% if not HMP %} checked="checked"{% endif %} /> {{ lang('NO') }}</label>	
 	</dd>
 </dl>

@@ -51,7 +51,7 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			'core.permissions'						=>	'hidemyprofile_permissions',
-			'core.memberlist_view_profile'	=> 'hidemyprofile_check',
+			'core.memberlist_view_profile'			=> 'hidemyprofile_check',
 			'core.ucp_prefs_personal_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_personal_update_data'	=> 'ucp_prefs_set_data',
 		);
@@ -60,7 +60,9 @@ class listener implements EventSubscriberInterface
 	/**
 	 * Permission's language file is automatically loaded
 	 *
-	 * @event core.permissions
+	 * @event	object $event	The event object
+	 * @return	null
+	 * @access	public
 	 */
 	public function hidemyprofile_permissions($event)
 	{
@@ -69,7 +71,7 @@ class listener implements EventSubscriberInterface
 		$permissions += array(
 			'u_hidemyprofile' => array(
 				'lang'	=> 'ACL_U_HIDEMYPROFILE',
-				'cat'	=> 'misc',
+				'cat'	=> 'profile',
 			),
 		);
 
@@ -80,7 +82,10 @@ class listener implements EventSubscriberInterface
 	 * We'll check to see if user can view this profile or not
 	 * if not show a message stating so
 	 *
-	 * @event core.memberlist_modify_viewprofile_sql
+	 *
+	 * @event	object $event	The event object
+	 * @return	null
+	 * @access	public
 	 */
 	public function hidemyprofile_check($event)
 	{
@@ -102,9 +107,9 @@ class listener implements EventSubscriberInterface
 	/**
 	* Get user's option and display it in UCP Prefs View page
 	*
-	* @param object $event The event object
-	* @return null
-	* @access public
+	* @param	object	$event	The event object
+	* @return	null
+	* @access	public
 	*/
 	public function ucp_prefs_get_data($event)
 	{
@@ -135,9 +140,9 @@ class listener implements EventSubscriberInterface
 	/**
 	* Add user's hidemyprofile option state into the sql_array
 	*
-	* @param object $event The event object
-	* @return null
-	* @access public
+	* @param	object	$event	The event object
+	* @return	null
+	* @access	public
 	*/
 	public function ucp_prefs_set_data($event)
 	{
