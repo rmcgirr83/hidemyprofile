@@ -20,6 +20,9 @@ class listener implements EventSubscriberInterface
 	/** @var \phpbb\auth\auth */
 	protected $auth;
 
+	/** @var \phpbb\language\language */
+	protected $language;
+
 	/** @var \phpbb\request\request */
 	protected $request;
 
@@ -33,15 +36,22 @@ class listener implements EventSubscriberInterface
 	* Constructor
 	*
 	* @param \phpbb\auth\auth
+	* @param \phpbb\language\language
 	* @param \phpbb\request\request $request
 	* @param \phpbb\template\template $template
 	* @param \phpbb\user $user
 	* @return \rmcgirr83\hidemyprofile\event\listener
 	* @access public
 	*/
-	public function __construct(\phpbb\auth\auth $auth, \phpbb\request\request $request, \phpbb\template\template $template, \phpbb\user $user)
+	public function __construct(
+		\phpbb\auth\auth $auth,
+		\phpbb\language\language $language,
+		\phpbb\request\request $request,
+		\phpbb\template\template $template,
+		\phpbb\user $user)
 	{
 		$this->auth = $auth;
+		$this->language = $language;
 		$this->request = $request;
 		$this->template = $template;
 		$this->user = $user;
@@ -125,7 +135,7 @@ class listener implements EventSubscriberInterface
 			'hmp'	=> $this->request->variable('hmp', (int) $this->user->data['user_hmp']),
 		));
 
-		$this->user->add_lang_ext('rmcgirr83/hidemyprofile', 'hidemyprofile');
+		$this->language->add_lang('hidemyprofile', 'rmcgirr83/hidemyprofile');
 
 		// Output the data vars to the template (except on form submit)
 		if (!$event['submit'])

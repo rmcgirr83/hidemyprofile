@@ -3,6 +3,7 @@ services:
         class: rmcgirr83\hidemyprofile\event\listener
         arguments:
             - '@auth'
+            - '@language'
             - '@request'
             - '@template'
             - '@user'
