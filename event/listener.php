@@ -124,22 +124,16 @@ class listener implements EventSubscriberInterface
 	public function ucp_prefs_get_data($event)
 	{
 
-		// if the user is not allowed to set
-		if (!$this->auth->acl_get('u_hidemyprofile'))
-		{
-			return;
-		}
-
 		// Request the user option vars and add them to the data array
 		$event['data'] = array_merge($event['data'], array(
 			'hmp'	=> $this->request->variable('hmp', (int) $this->user->data['user_hmp']),
 		));
 
-		$this->language->add_lang('hidemyprofile', 'rmcgirr83/hidemyprofile');
-
 		// Output the data vars to the template (except on form submit)
-		if (!$event['submit'])
+		if (!$event['submit'] && $this->auth->acl_get('u_hidemyprofile'))
 		{
+			$this->language->add_lang('hidemyprofile', 'rmcgirr83/hidemyprofile');
+
 			$this->template->assign_vars(array(
 				'S_UCP_HMP'	=> true,
 				'HMP'	=> $event['data']['hmp'],

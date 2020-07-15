@@ -33,4 +33,5 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'HIDEMYPROFILE'			=> 'Hide My Profile',
 	'HIDEMYPROFILE_EXPLAIN'	=> 'If set as yes, your profile will be hidden from regular users',
+	'EXTENSION_REQUIREMENTS' => 'Extension requires at least phpBB version %1$s.  You must update your phpBB version to use this extension.',
 ));
