@@ -10,6 +10,10 @@
 
 namespace rmcgirr83\hidemyprofile\event;
 
+use phpbb\auth\auth;
+use phpbb\language\language;
+use phpbb\request\request;
+use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -17,19 +21,19 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
-	/** @var \phpbb\auth\auth */
+	/** @var auth */
 	protected $auth;
 
-	/** @var \phpbb\language\language */
+	/** @var language */
 	protected $language;
 
-	/** @var \phpbb\request\request */
+	/** @var request */
 	protected $request;
 
-	/** @var \phpbb\template\template */
+	/** @var template */
 	protected $template;
 
-	/** @var \phpbb\user */
+	/** @var user */
 	protected $user;
 
 	/**
@@ -57,6 +61,13 @@ class listener implements EventSubscriberInterface
 		$this->user = $user;
 	}
 
+	/**
+	* Assign functions defined in this class to event listeners in the core
+	*
+	* @return array
+	* @static
+	* @access public
+	*/
 	static public function getSubscribedEvents()
 	{
 		return array(
@@ -78,12 +89,10 @@ class listener implements EventSubscriberInterface
 	{
 		$permissions = $event['permissions'];
 
-		$permissions += array(
-			'u_hidemyprofile' => array(
+		$permissions['u_hidemyprofile'] = [
 				'lang'	=> 'ACL_U_HIDEMYPROFILE',
 				'cat'	=> 'profile',
-			),
-		);
+		];
 
 		$event['permissions'] = $permissions;
 	}
@@ -125,19 +134,19 @@ class listener implements EventSubscriberInterface
 	{
 
 		// Request the user option vars and add them to the data array
-		$event['data'] = array_merge($event['data'], array(
+		$event['data'] = array_merge($event['data'], [
 			'hmp'	=> $this->request->variable('hmp', (int) $this->user->data['user_hmp']),
-		));
+		]);
 
 		// Output the data vars to the template (except on form submit)
 		if (!$event['submit'] && $this->auth->acl_get('u_hidemyprofile'))
 		{
 			$this->language->add_lang('hidemyprofile', 'rmcgirr83/hidemyprofile');
 
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'S_UCP_HMP'	=> true,
 				'HMP'	=> $event['data']['hmp'],
-			));
+			]);
 		}
 	}
 
@@ -150,8 +159,8 @@ class listener implements EventSubscriberInterface
 	*/
 	public function ucp_prefs_set_data($event)
 	{
-		$event['sql_ary'] = array_merge($event['sql_ary'], array(
+		$event['sql_ary'] = array_merge($event['sql_ary'], [
 			'user_hmp' => $event['data']['hmp'],
-		));
+		]);
 	}
 }
