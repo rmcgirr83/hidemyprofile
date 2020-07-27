@@ -13,6 +13,7 @@ namespace rmcgirr83\hidemyprofile\event;
 use phpbb\auth\auth;
 use phpbb\language\language;
 use phpbb\request\request;
+use phpbb\template\template;
 use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -48,11 +49,11 @@ class listener implements EventSubscriberInterface
 	* @access public
 	*/
 	public function __construct(
-		\phpbb\auth\auth $auth,
-		\phpbb\language\language $language,
-		\phpbb\request\request $request,
-		\phpbb\template\template $template,
-		\phpbb\user $user)
+		auth $auth,
+		language $language,
+		request $request,
+		template $template,
+		user $user)
 	{
 		$this->auth = $auth;
 		$this->language = $language;
@@ -71,11 +72,30 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
+			'core.acp_extensions_run_action_after'	=>	'acp_extensions_run_action_after',
 			'core.permissions'						=>	'hidemyprofile_permissions',
 			'core.memberlist_view_profile'			=> 'hidemyprofile_check',
 			'core.ucp_prefs_personal_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_personal_update_data'	=> 'ucp_prefs_set_data',
 		);
+	}
+
+	/* Display additional metdate in extension details
+	*
+	* @param $event			event object
+	* @param return null
+	* @access public
+	*/
+	public function acp_extensions_run_action_after($event)
+	{
+		if ($event['ext_name'] == 'rmcgirr83/hidemyprofile' && $event['action'] == 'details')
+		{
+			$this->language->add_lang('hidemyprofile', $event['ext_name']);
+			$this->template->assign_vars([
+				'L_BUY_ME_A_BEER_EXPLAIN'	=> $this->language->lang('BUY ME A BEER_EXPLAIN', '<a href="' . $this->language->lang('BUY_ME_A_BEER_URL') . '" target="_blank" rel=”noreferrer noopener”>', '</a>'),
+				'S_BUY_ME_A_BEER_HMP' => true,
+			]);
+		}
 	}
 
 	/**
