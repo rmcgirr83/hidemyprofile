@@ -2,8 +2,8 @@
     "name": "rmcgirr83/hidemyprofile",
     "type": "phpbb-extension",
     "description": "This Extension will allow your members to choose to hide their profile or not.  Permission based and admins and mods always are allowed to view others profiles.",
-    "version": "1.0.1",
-    "time": "2020-07-15",
+    "version": "1.0.2",
+    "time": "2020-08-25",
     "keywords": [
         "phpbb",
         "extension",
