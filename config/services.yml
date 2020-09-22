@@ -3,8 +3,10 @@ services:
         class: rmcgirr83\hidemyprofile\event\listener
         arguments:
             - '@auth'
+            - '@dbal.conn'
             - '@language'
             - '@request'
+            - '%tables%'
             - '@template'
             - '@user'
         tags:

@@ -11,6 +11,7 @@
 namespace rmcgirr83\hidemyprofile\event;
 
 use phpbb\auth\auth;
+use phpbb\db\driver\driver_interface;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
@@ -25,11 +26,17 @@ class listener implements EventSubscriberInterface
 	/** @var auth */
 	protected $auth;
 
+	/** @var \phpbb\db\driver\driver_interface */
+	protected $db;
+
 	/** @var language */
 	protected $language;
 
 	/** @var request */
 	protected $request;
+
+	/** @var array phpBB tables */
+	protected $tables;
 
 	/** @var template */
 	protected $template;
@@ -40,24 +47,30 @@ class listener implements EventSubscriberInterface
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth
-	* @param \phpbb\language\language
-	* @param \phpbb\request\request $request
-	* @param \phpbb\template\template $template
-	* @param \phpbb\user $user
+	* @param \phpbb\auth\auth					$auth			Auth object
+	* @param \phpbb\db\driver\driver_interface	$db				Database object
+	* @param \phpbb\language\language			$language		Language object
+	* @param \phpbb\request\request 			$request		Request object
+	* @param array								$tables			phpBB db tables
+	* @param \phpbb\template\template 			$template		Template object
+	* @param \phpbb\user 						$user			User object
 	* @return \rmcgirr83\hidemyprofile\event\listener
 	* @access public
 	*/
 	public function __construct(
 		auth $auth,
+		driver_interface $db,
 		language $language,
 		request $request,
+		array $tables,
 		template $template,
 		user $user)
 	{
 		$this->auth = $auth;
+		$this->db = $db;
 		$this->language = $language;
 		$this->request = $request;
+		$this->tables = $tables;
 		$this->template = $template;
 		$this->user = $user;
 	}
@@ -74,13 +87,13 @@ class listener implements EventSubscriberInterface
 		return array(
 			'core.acp_extensions_run_action_after'	=>	'acp_extensions_run_action_after',
 			'core.permissions'						=>	'hidemyprofile_permissions',
-			'core.memberlist_view_profile'			=> 'hidemyprofile_check',
+			'core.memberlist_view_profile'			=> 'memberlist_view_profile',
 			'core.ucp_prefs_personal_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_personal_update_data'	=> 'ucp_prefs_set_data',
 		);
 	}
 
-	/* Display additional metdate in extension details
+	/* Display additional metadata in extension details
 	*
 	* @param $event			event object
 	* @param return null
@@ -118,17 +131,21 @@ class listener implements EventSubscriberInterface
 	 * We'll check to see if user can view this profile or not
 	 * if not show a message stating so
 	 *
-	 *
 	 * @event	object $event	The event object
 	 * @return	null
 	 * @access	public
 	 */
-	public function hidemyprofile_check($event)
+	public function memberlist_view_profile($event)
 	{
 		$member = $event['member'];
 
-		// if admin or mod, or permission to hide is no longer allowed, allow the view
-		if ($this->auth->acl_get('a_') || $this->auth->acl_get('m_') || $this->auth->acl_getf_global('m_') || !$this->auth->acl_get_list($member['user_id'], 'u_hidemyprofile', false))
+		$is_friend = in_array($this->user->data['user_id'], $this->get_friends($member['user_id']));
+
+		// If admin or mod, or a friend of the user...allow the view
+		$is_allowed = ($this->auth->acl_gets('a_', 'm_') || $this->auth->acl_getf_global('m_') || $is_friend) ? true : false;
+
+		// if is_allowed or permission to hide is no longer allowed, allow the view
+		if ($is_allowed || !$this->auth->acl_get_list($member['user_id'], 'u_hidemyprofile', false))
 		{
 			return;
 		}
@@ -138,6 +155,31 @@ class listener implements EventSubscriberInterface
 		{
 			trigger_error('NOT_AUTHORISED');
 		}
+	}
+
+	/**
+	* Allow friends to view the profile
+	*
+	* @param	member_id		$member_id	The members user_id
+	* @return	array
+	* @access	private
+	*/
+	private function get_friends($member_id)
+	{
+		$sql = 'SELECT zebra_id
+			FROM ' . $this->tables['zebra'] . '
+			WHERE user_id = ' . (int) $member_id . '
+			AND friend = 1';
+		$result = $this->db->sql_query($sql);
+
+		$friends = [];
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$friends[$row['zebra_id']] = $row['zebra_id'];
+		}
+		$this->db->sql_freeresult($result);
+
+		return $friends;
 	}
 
 	/**
