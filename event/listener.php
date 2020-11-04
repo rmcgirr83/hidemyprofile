@@ -85,8 +85,8 @@ class listener implements EventSubscriberInterface
 	static public function getSubscribedEvents()
 	{
 		return array(
-			'core.acp_extensions_run_action_after'	=>	'acp_extensions_run_action_after',
-			'core.permissions'						=>	'hidemyprofile_permissions',
+			'core.acp_extensions_run_action_after'	=> 'acp_extensions_run_action_after',
+			'core.permissions'						=> 'hidemyprofile_permissions',
 			'core.memberlist_view_profile'			=> 'memberlist_view_profile',
 			'core.ucp_prefs_personal_data'			=> 'ucp_prefs_get_data',
 			'core.ucp_prefs_personal_update_data'	=> 'ucp_prefs_set_data',
@@ -135,7 +135,7 @@ class listener implements EventSubscriberInterface
 	 * @return	null
 	 * @access	public
 	 */
-	public function memberlist_view_profile($event)
+	public function memberlist_view_profile($event): void
 	{
 		$member = $event['member'];
 
