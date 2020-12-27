@@ -1,7 +1,8 @@
-hidemyprofile
-=========================
+# Hide my profile for phpBB3
 
 phpBB extension that allows users to be able to hide their profile.  Permissions based and admins and mods always have the ability to view a users profile.
+
+[![Build Status](https://github.com/rmcgirr83/hidemyprofile/workflows/Tests/badge.svg)](https://github.com/rmcgirr83/hidemyprofile/actions)
 
 ## Installation
 
