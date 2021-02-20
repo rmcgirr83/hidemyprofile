@@ -11,7 +11,7 @@
 namespace rmcgirr83\hidemyprofile\event;
 
 use phpbb\auth\auth;
-use phpbb\db\driver\driver_interface;
+use phpbb\db\driver\driver_interface as db;
 use phpbb\language\language;
 use phpbb\request\request;
 use phpbb\template\template;
@@ -23,43 +23,43 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class listener implements EventSubscriberInterface
 {
-	/** @var auth */
+	/** @var auth $auth */
 	protected $auth;
 
-	/** @var \phpbb\db\driver\driver_interface */
+	/** @var db $db */
 	protected $db;
 
-	/** @var language */
+	/** @var language $language */
 	protected $language;
 
-	/** @var request */
+	/** @var request $request */
 	protected $request;
 
 	/** @var array phpBB tables */
 	protected $tables;
 
-	/** @var template */
+	/** @var template $template*/
 	protected $template;
 
-	/** @var user */
+	/** @var user $user */
 	protected $user;
 
 	/**
 	* Constructor
 	*
-	* @param \phpbb\auth\auth					$auth			Auth object
-	* @param \phpbb\db\driver\driver_interface	$db				Database object
-	* @param \phpbb\language\language			$language		Language object
-	* @param \phpbb\request\request 			$request		Request object
-	* @param array								$tables			phpBB db tables
-	* @param \phpbb\template\template 			$template		Template object
-	* @param \phpbb\user 						$user			User object
+	* @param auth					$auth			Auth object
+	* @param db						$db				Database object
+	* @param language				$language		Language object
+	* @param request 				$request		Request object
+	* @param array					$tables			phpBB db tables
+	* @param template 				$template		Template object
+	* @param user 					$user			User object
 	* @return \rmcgirr83\hidemyprofile\event\listener
 	* @access public
 	*/
 	public function __construct(
 		auth $auth,
-		driver_interface $db,
+		db $db,
 		language $language,
 		request $request,
 		array $tables,
